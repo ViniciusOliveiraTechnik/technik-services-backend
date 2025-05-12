@@ -1,4 +1,3 @@
-import dj_database_url
 from pathlib import Path
 import os
 
@@ -6,9 +5,14 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL')
-    )
+    "default": {
+        "ENGINE": os.environ.get('SECRET_KEY'),
+        "NAME": os.environ.get('SECRET_KEY'),
+        "USER": os.environ.get('SECRET_KEY'),
+        "PASSWORD": os.environ.get('SECRET_KEY'),
+        "HOST": os.environ.get('SECRET_KEY'),
+        "PORT": os.environ.get('SECRET_KEY'),
+    }
 }
 
 # Quick-start development settings - unsuitable for production
