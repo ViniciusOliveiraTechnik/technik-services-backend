@@ -1,0 +1,6 @@
+from .register_view import ( AccountRegisterView )
+from .login_view import ( AccountLoginView )
+from .profile_view import ( AccountProfileView )
+from .list_view import ( AccountListView )
+from .two_factors_view import ( AccountTwoFactorsView )
+from .refresh_otp_view import ( AccountRefreshOtpView )
