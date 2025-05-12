@@ -6,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 DATABASES = {
     "default": {
-        "ENGINE": os.environ.get('SECRET_KEY'),
+        "ENGINE": "django.db.backends.postgresql",
         "NAME": os.environ.get('SECRET_KEY'),
         "USER": os.environ.get('SECRET_KEY'),
         "PASSWORD": os.environ.get('SECRET_KEY'),
