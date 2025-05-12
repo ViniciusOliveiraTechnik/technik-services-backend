@@ -1,18 +1,14 @@
 from pathlib import Path
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+DATABASE_URL = "postgresql://postgres:yJppOdJGpIKoFWGVomDBZdIOvNVlisOX@tramway.proxy.rlwy.net:55818/railway"
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get('SECRET_KEY'),
-        "USER": os.environ.get('SECRET_KEY'),
-        "PASSWORD": os.environ.get('SECRET_KEY'),
-        "HOST": os.environ.get('SECRET_KEY'),
-        "PORT": os.environ.get('SECRET_KEY'),
-    }
+    "default": dj_database_url.config(default=DATABASE_URL, conn_max_age=1800),
 }
 
 # Quick-start development settings - unsuitable for production

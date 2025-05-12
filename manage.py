@@ -4,7 +4,7 @@ import os
 import sys
 
 from dotenv import load_dotenv
-load_dotenv() # Used to load all external and sensitve variables from .env
+load_dotenv()
 
 
 def main():
