@@ -5,10 +5,10 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-COPY requirements.txt /app/
+COPY requirements.txt /app
 
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-COPY . /app/
+COPY . /app
 
 CMD ["gunicorn", "erp_services.wsgi:application", "--bind", "0.0.0.0:8000"]
