@@ -1,20 +1,14 @@
+import dj_database_url
 from pathlib import Path
-import environ
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-env = environ.Env()
-environ.Env.read_env()
-
 DATABASES = {
-    "default": env.db("DATABASE_URL", default="postgres://postgres:password@localhost:5432/railway")
-}
-
-DATABASES["default"]["CONN_MAX_AGE"] = 600  # Conexão persistente (recomendado)
-DATABASES["default"]["OPTIONS"] = {
-    "sslmode": "require"  # Importante para conexões seguras em produção
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL')
+    )
 }
 
 # Quick-start development settings - unsuitable for production
