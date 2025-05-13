@@ -14,6 +14,6 @@ load_dotenv() # Used to load all external and sensitve variables from .env
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'erp_services.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'erp_services.settings.development')
 
 application = get_wsgi_application()
