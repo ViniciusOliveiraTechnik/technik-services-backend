@@ -1,7 +1,7 @@
 import os
 from celery import Celery
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'erp_services.settings.development')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'erp_services.settings.production')
 
 app = Celery('erp_services')
 app.config_from_object('django.conf:settings', namespace='CELERY')
