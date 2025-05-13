@@ -1,2 +1,3 @@
-from .reset_request_view import ( PasswordResetRequestView )
-from .reset_confirm_view import ( PasswordResetConfirmView )
+from .forgot_request_view import ( PasswordForgotRequestView )
+from .forgot_confirm_view import ( PasswordForgotConfirmView )
+from .reset_view import ( PasswordResetView )

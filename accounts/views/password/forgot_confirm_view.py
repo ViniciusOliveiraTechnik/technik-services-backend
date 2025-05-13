@@ -6,10 +6,10 @@ from rest_framework.exceptions import NotFound, AuthenticationFailed, Validation
 
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 
-from accounts.services import PasswordResetService
+from accounts.services import PasswordForgotService
 from accounts.utils import time_performance
 
-class PasswordResetConfirmView(APIView):
+class PasswordForgotConfirmView(APIView):
 
     permission_classes = [AllowAny]
 
@@ -19,7 +19,7 @@ class PasswordResetConfirmView(APIView):
         data = request.data
         tokem_param = request.query_params.get('token')
 
-        service = PasswordResetService()
+        service = PasswordForgotService()
 
         try:
 

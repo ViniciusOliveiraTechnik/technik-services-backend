@@ -4,10 +4,10 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.exceptions import ValidationError
 
-from accounts.services import PasswordResetService
+from accounts.services import PasswordForgotService
 from accounts.utils import time_performance
 
-class PasswordResetRequestView(APIView):
+class PasswordForgotRequestView(APIView):
 
     permission_classes = [AllowAny]
 
@@ -16,7 +16,7 @@ class PasswordResetRequestView(APIView):
 
         data = request.data
 
-        service = PasswordResetService()
+        service = PasswordForgotService()
 
         try:
 

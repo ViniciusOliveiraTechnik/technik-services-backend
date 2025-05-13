@@ -18,7 +18,7 @@ class AccountDetailService:
         request_user = self._get_request_user()
 
         explicit_user = self.context.get('explicit_user')
-
+        
         if request_user:
 
             if request_user.id == obj.id or request_user.is_staff:

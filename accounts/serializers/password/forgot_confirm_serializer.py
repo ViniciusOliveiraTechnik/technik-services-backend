@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from django.contrib.auth.password_validation import validate_password
 
-class PasswordResetConfirmSerializer(serializers.Serializer):
+class PasswordForgotConfirmSerializer(serializers.Serializer):
 
     password = serializers.CharField(write_only=True)
 

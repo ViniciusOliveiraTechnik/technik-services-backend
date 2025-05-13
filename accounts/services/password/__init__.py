@@ -1,1 +1,2 @@
-from .reset_service import PasswordResetService
+from .forgot_service import ( PasswordForgotService )
+from .reset_service import ( PasswordResetService )

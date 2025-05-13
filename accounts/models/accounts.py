@@ -91,6 +91,7 @@ class Account(AbstractUser):
     username = None # Deactivating username
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True, null=False, editable=False)
+    
     first_name = models.CharField('Nome', max_length=80)
     last_name = models.CharField('Sobrenome', max_length=80)
     
