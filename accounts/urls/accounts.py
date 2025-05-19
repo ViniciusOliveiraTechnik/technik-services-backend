@@ -12,7 +12,7 @@ urlpatterns = [
     path('auth/login/', AccountLoginView.as_view(), name='login_account'),
     path('auth/logout/', TokenBlacklistView.as_view(), name='logout'),
     path('auth/refresh-token/', TokenRefreshView.as_view(), name='auth_refresh_token'),
-    path('auth/2fa-authentication/', AccountTwoFactorsView.as_view(), name='auth_2fa_authentication'),
+    path('auth/2F-authentication/', AccountTwoFactorsView.as_view(), name='auth_2F_authentication'),
     path('auth/refresh-otp-secret/', AccountRefreshOtpView.as_view(), name='auth_refresh_otp_secret'),
 
 ]

@@ -27,6 +27,12 @@ class AccountRegisterSerializer(serializers.ModelSerializer):
 
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        from accounts.services import AccountRegisterService
+        self.service = AccountRegisterService()
+
     def validate(self, data: Dict[str, Any]) -> Dict[str, Any]:
         """
         Validate the input data for user registration.
@@ -40,10 +46,6 @@ class AccountRegisterSerializer(serializers.ModelSerializer):
         Raises:
             serializers.ValidationError: If any validation fails.
         """
-        from accounts.services import AccountRegisterService
-
-        service = AccountRegisterService()
-
         phone_number = str(data.get('phone_number')).strip()
         phone_number_region = str(data.get('phone_number_region', 'BR')).strip()
 
@@ -52,12 +54,14 @@ class AccountRegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('As credenciais de contato não foram passadas corretamente')
 
         phone_helper = PhoneHelper(default_region=phone_number_region)
+        
+        normalized_phone = phone_helper.normalize(phone_number)
 
-        data['phone_number'] = phone_helper.normalize(phone_number)
+        if self.service.check_exists('phone_number', normalized_phone):
 
-        if service.check_exists('phone_number', data['phone_number']):
-
-            raise serializers.ValidationError('O número de contato não pôde ser cadastrado')
+            raise serializers.ValidationError('O número de contato não pode ser cadastrado')
+        
+        data['phone_number'] = phone_number
 
         return data
 
@@ -74,13 +78,9 @@ class AccountRegisterSerializer(serializers.ModelSerializer):
         Raises:
             serializers.ValidationError: If the email address already exists.
         """
-        from accounts.services import AccountRegisterService
-
-        service = AccountRegisterService()
-
         value = str(value).strip()
 
-        if service.check_exists('email', value):
+        if self.service.check_exists('email', value):
 
             raise serializers.ValidationError('Não foi possível concluir o cadastro com os dados fornecidos')
         
@@ -99,10 +99,6 @@ class AccountRegisterSerializer(serializers.ModelSerializer):
         Raises:
             serializers.ValidationError: If the CPF already exists.
         """
-        from accounts.services import AccountRegisterService
-
-        service = AccountRegisterService()
-
         value = str(value).strip()
 
         cpf_helper = CPFHelper()
@@ -115,7 +111,7 @@ class AccountRegisterSerializer(serializers.ModelSerializer):
 
         hashed_cpf = cpf_helper.create_hash(normalized_cpf)
 
-        if service.check_exists('hashed_cpf', hashed_cpf):
+        if self.service.check_exists('hashed_cpf', hashed_cpf):
 
             raise serializers.ValidationError('Não foi possível concluir o cadastro com os dados fornecidos')
         
@@ -150,8 +146,4 @@ class AccountRegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data: Dict[str, Any]):
 
-        from accounts.services import AccountRegisterService
-
-        service = AccountRegisterService()  
-
-        return service.create(validated_data)
+        return self.service.create(validated_data)

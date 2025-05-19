@@ -11,7 +11,7 @@ from accounts.paginations import StandardResultsSetPagination
 from accounts.serializers import AccountDetailSerializer
 from accounts.models import Account
 
-@method_decorator(cache_page(60 * 15), name='dispatch')
+@method_decorator(cache_page(60 * 5), name='dispatch')
 class AccountListView(ListAPIView):
     
     queryset = Account.objects.all().order_by('first_name')
@@ -19,3 +19,10 @@ class AccountListView(ListAPIView):
     permission_classes = [IsAuthenticated, TwoFactorsValidated]
     serializer_class = AccountDetailSerializer
     pagination_class = StandardResultsSetPagination
+
+    def get_serializer_context(self):
+        
+        context = super().get_serializer_context()
+        context['request'] = self.request
+
+        return context

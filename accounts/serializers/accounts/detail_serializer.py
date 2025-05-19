@@ -13,6 +13,13 @@ class AccountDetailSerializer(serializers.ModelSerializer):
         model = Account
         exclude = ['password', 'otp_secret', 'hashed_cpf', 'encrypted_cpf', 'user_permissions', 'groups', 'is_superuser', 'last_login', 'is_staff']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        from accounts.services import AccountDetailService
+
+        self.service = AccountDetailService(context=self.context)
+
     def get_cpf(self, obj: Account) -> str:
         """
         Get the masked CPF of the user.
@@ -23,15 +30,11 @@ class AccountDetailSerializer(serializers.ModelSerializer):
         Returns:
             str: The masked CPF if the user is staff or the same user, otherwise returns a placeholder.
         """
-        from accounts.services import AccountDetailService
-
-        service = AccountDetailService(self.context)
-
         cpf_helper = CPFHelper()
 
         cpf = cpf_helper.decrypt(obj.encrypted_cpf)
 
-        if service.can_view_sensitive(obj):
+        if self.service.can_view_sensitive(obj):
 
             return cpf_helper.mask(cpf) if cpf else 'Sem registro'
         
@@ -47,17 +50,13 @@ class AccountDetailSerializer(serializers.ModelSerializer):
         Returns:
             str: The masked phone number if the user is staff or the same user, otherwise returns a placeholder.
         """
-        from accounts.services import AccountDetailService
-
-        service = AccountDetailService(self.context)
-
         phone_helper = PhoneHelper()
 
         if not obj.phone_number:
 
             return 'Sem registro'
 
-        if service.can_view_contacts(obj):
+        if self.service.can_view_contacts(obj):
 
             return phone_helper.mask(obj.phone_number)
         
