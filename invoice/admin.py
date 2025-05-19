@@ -1,5 +1,4 @@
 from django.contrib import admin
-from invoice.models import Card, Invoice
+from invoice.models import Card, Purchase, Invoice
 
-admin.site.register(Card)
-admin.site.register(Invoice)
+admin.site.register([Card, Purchase, Invoice])

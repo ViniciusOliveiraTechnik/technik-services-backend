@@ -1,0 +1,1 @@
+from .detail_serializer import ( PurchaseDetailSerializer )

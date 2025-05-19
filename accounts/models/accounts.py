@@ -116,7 +116,8 @@ class Account(AbstractUser):
     
     # Instance methods
     def __str__(self) -> str:
-        return f"{self.first_name} {self.last_name} ({self.email})"
+
+        return f"{self.first_name} {self.last_name}"
     
     def set_cpf(self, cpf: str):
         """
@@ -129,6 +130,7 @@ class Account(AbstractUser):
             ValueError: If the CPF is not provided.
         """
         if not cpf:
+
             raise ValueError('CPF is empty')
         
         helper = CPFHelper()
@@ -140,6 +142,7 @@ class Account(AbstractUser):
     def check_cpf(self, cpf: str) -> bool:
 
         if not cpf:
+
             raise ValueError('CPF is empty')
         
         helper = CPFHelper()

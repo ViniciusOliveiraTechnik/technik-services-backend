@@ -1,1 +1,1 @@
-from .invoice_view import InvoiceUploadView
+from .invoice import *
