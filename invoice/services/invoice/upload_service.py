@@ -1,4 +1,4 @@
-from invoice.serializers import InvoiceUploadSerializer
+from invoice.serializers.invoice import InvoiceUploadSerializer
 from invoice.models import Invoice
 
 class InvoiceUploadService:

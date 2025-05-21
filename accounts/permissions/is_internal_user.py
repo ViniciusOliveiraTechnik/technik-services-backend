@@ -1,6 +1,6 @@
 from rest_framework.permissions import BasePermission
 
-from accounts.utils import PermissionsHelper
+from accounts.utils import PermissionsUtil
 
 class IsInternalUser(BasePermission):
 
@@ -8,4 +8,4 @@ class IsInternalUser(BasePermission):
 
     def has_permission(self, request, view):
 
-        return PermissionsHelper(request.user).check_internal()
+        return PermissionsUtil(request.user).check_internal()

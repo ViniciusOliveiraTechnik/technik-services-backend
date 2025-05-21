@@ -1,6 +1,6 @@
 from accounts.models import Account
 from accounts.serializers import AccountTwoFactorsSerializer, AccountDetailSerializer
-from accounts.utils import JWTHelper, OTPHelper
+from accounts.utils import JWTUtil, OTPUtil
 
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework_simplejwt.exceptions import InvalidToken, ExpiredTokenError
@@ -12,8 +12,8 @@ class AccountTwoFactorsService:
     def __init__(self, context=None):
         
         self.context = context or {}
-        self.jwt_helper =JWTHelper()
-        self.otp_helper = OTPHelper()
+        self.jwt_Util =JWTUtil()
+        self.otp_Util = OTPUtil()
 
     def execute(self, data, auth):
 
@@ -32,11 +32,11 @@ class AccountTwoFactorsService:
 
                 user = Account.objects.get(id=user_id)
 
-                if not self.otp_helper.verify_otp(otp_code, user.otp_secret):
+                if not self.otp_Util.verify_otp(otp_code, user.otp_secret):
 
                     raise ValidationError
 
-                tokens = self.jwt_helper.generate_tokens(user)
+                tokens = self.jwt_Util.generate_tokens(user)
 
                 response_data = AccountDetailSerializer(user, context=self.context).data
 

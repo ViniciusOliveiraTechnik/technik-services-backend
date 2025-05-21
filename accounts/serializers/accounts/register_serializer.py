@@ -3,7 +3,7 @@
 
 from rest_framework import serializers
 
-from accounts.utils import PhoneHelper, CPFHelper
+from accounts.utils import PhoneUtil, CPFUtil
 from accounts.models import Account
 
 from typing import Any, Dict
@@ -53,9 +53,9 @@ class AccountRegisterSerializer(serializers.ModelSerializer):
 
             raise serializers.ValidationError('As credenciais de contato não foram passadas corretamente')
 
-        phone_helper = PhoneHelper(default_region=phone_number_region)
+        phone_Util = PhoneUtil(default_region=phone_number_region)
         
-        normalized_phone = phone_helper.normalize(phone_number)
+        normalized_phone = phone_Util.normalize(phone_number)
 
         if self.service.check_exists('phone_number', normalized_phone):
 
@@ -101,15 +101,15 @@ class AccountRegisterSerializer(serializers.ModelSerializer):
         """
         value = str(value).strip()
 
-        cpf_helper = CPFHelper()
+        cpf_Util = CPFUtil()
 
-        if not cpf_helper.validate(value):
+        if not cpf_Util.validate(value):
 
             raise serializers.ValidationError('CPF inválido')
 
-        normalized_cpf = cpf_helper.normalize(value)
+        normalized_cpf = cpf_Util.normalize(value)
 
-        hashed_cpf = cpf_helper.create_hash(normalized_cpf)
+        hashed_cpf = cpf_Util.create_hash(normalized_cpf)
 
         if self.service.check_exists('hashed_cpf', hashed_cpf):
 

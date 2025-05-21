@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from accounts.utils import PhoneHelper, CPFHelper
+from accounts.utils import PhoneUtil, CPFUtil
 from accounts.models import Account
 
 class AccountDetailSerializer(serializers.ModelSerializer):
@@ -30,13 +30,13 @@ class AccountDetailSerializer(serializers.ModelSerializer):
         Returns:
             str: The masked CPF if the user is staff or the same user, otherwise returns a placeholder.
         """
-        cpf_helper = CPFHelper()
+        cpf_Util = CPFUtil()
 
-        cpf = cpf_helper.decrypt(obj.encrypted_cpf)
+        cpf = cpf_Util.decrypt(obj.encrypted_cpf)
 
         if self.service.can_view_sensitive(obj):
 
-            return cpf_helper.mask(cpf) if cpf else 'Sem registro'
+            return cpf_Util.mask(cpf) if cpf else 'Sem registro'
         
         return '***.***.***-**'
     
@@ -50,7 +50,7 @@ class AccountDetailSerializer(serializers.ModelSerializer):
         Returns:
             str: The masked phone number if the user is staff or the same user, otherwise returns a placeholder.
         """
-        phone_helper = PhoneHelper()
+        phone_Util = PhoneUtil()
 
         if not obj.phone_number:
 
@@ -58,6 +58,6 @@ class AccountDetailSerializer(serializers.ModelSerializer):
 
         if self.service.can_view_contacts(obj):
 
-            return phone_helper.mask(obj.phone_number)
+            return phone_Util.mask(obj.phone_number)
         
         return f'{obj.phone_number[:3]} *********{obj.phone_number[-2:]}'

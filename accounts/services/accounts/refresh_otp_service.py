@@ -1,5 +1,5 @@
 from accounts.models import Account
-from accounts.utils import OTPHelper
+from accounts.utils import OTPUtil
 
 from rest_framework.exceptions import NotFound, NotAuthenticated
 
@@ -7,7 +7,7 @@ class AccountRefreshOtpService:
 
     def __init__(self):
         
-        self.helper = OTPHelper()
+        self.Util = OTPUtil()
 
     def execute(self, pk):
         
@@ -15,7 +15,7 @@ class AccountRefreshOtpService:
 
             user = Account.objects.get(id=pk)
             
-            user.otp_secret = self.helper.generate_otp_secret()
+            user.otp_secret = self.Util.generate_otp_secret()
             user.save(update_fields=['otp_secret'])
 
             return {'message': 'Chave de autenticação atualizada com sucesso'}

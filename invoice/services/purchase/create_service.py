@@ -1,4 +1,4 @@
-from invoice.utils import ItauReaderHelper
+from invoice.utils.reader import ItauReaderUtil
 
 class PurchaseCreateService:
 
@@ -9,7 +9,7 @@ class PurchaseCreateService:
         self.context = context or {}
 
         self.readers = {
-            'Itaú': ItauReaderHelper(file=self.file, invoice_instance=self.invoice_instance)
+            'Itaú': ItauReaderUtil(file=self.file, invoice_instance=self.invoice_instance)
         }
 
     def execute(self):

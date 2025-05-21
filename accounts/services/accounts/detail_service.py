@@ -1,5 +1,5 @@
 from accounts.models import Account
-from accounts.utils import PermissionsHelper
+from accounts.utils import PermissionsUtil
 
 class AccountDetailService:
 
@@ -25,7 +25,7 @@ class AccountDetailService:
 
                 return True
 
-            if PermissionsHelper(request_user).check_internal():
+            if PermissionsUtil(request_user).check_internal():
 
                 return True
 

@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 from django.db import models
 
-from accounts.utils import CPFHelper
+from accounts.utils import CPFUtil
 
 import uuid
 
@@ -133,11 +133,11 @@ class Account(AbstractUser):
 
             raise ValueError('CPF is empty')
         
-        helper = CPFHelper()
+        Util = CPFUtil()
 
-        self.encrypted_cpf = helper.encrypt(cpf)
+        self.encrypted_cpf = Util.encrypt(cpf)
 
-        self.hashed_cpf = helper.create_hash(cpf)
+        self.hashed_cpf = Util.create_hash(cpf)
 
     def check_cpf(self, cpf: str) -> bool:
 
@@ -145,6 +145,6 @@ class Account(AbstractUser):
 
             raise ValueError('CPF is empty')
         
-        helper = CPFHelper()
+        Util = CPFUtil()
 
-        return self.hashed_cpf == helper.create_hash(cpf)
+        return self.hashed_cpf == Util.create_hash(cpf)

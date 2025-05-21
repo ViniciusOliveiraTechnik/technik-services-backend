@@ -1,6 +1,6 @@
 from accounts.serializers import AccountLoginSerializer, AccountDetailSerializer
 from accounts.tokens import AuthenticationToken
-from accounts.utils import OTPHelper, generate_totp_qrcode
+from accounts.utils import OTPUtil, generate_totp_qrcode
 
 class AccountLoginService:
 
@@ -10,7 +10,7 @@ class AccountLoginService:
 
     def execute(self, data):
 
-        helper = OTPHelper()
+        Util = OTPUtil()
 
         serializer = AccountLoginSerializer(data=data)
 
@@ -22,10 +22,10 @@ class AccountLoginService:
 
         if not user.otp_secret:
             
-            user.otp_secret = helper.generate_otp_secret()
+            user.otp_secret = Util.generate_otp_secret()
             user.save()
 
-        totp_uri = helper.get_totp_uri(user.otp_secret, user.email)
+        totp_uri = Util.get_totp_uri(user.otp_secret, user.email)
 
         qr_code = generate_totp_qrcode(totp_uri)
 
