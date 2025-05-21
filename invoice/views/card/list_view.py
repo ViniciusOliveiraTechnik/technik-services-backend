@@ -7,7 +7,7 @@ from django.db.models import Sum, Count
 
 from invoice.models import Card
 from invoice.serializers.card import CardDetailSerializer
-from invoice.paginations import CardStandardPagination
+from invoice.paginations.card import CardStandardPagination
 
 from accounts.permissions import TwoFactorsValidated, IsInternalUser
 

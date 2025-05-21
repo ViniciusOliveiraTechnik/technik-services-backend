@@ -9,7 +9,11 @@ class PurchaseFilterService:
         self.maped_filters = {
             'start_date': 'purchase_date__gte',
             'end_date': 'purchase_date__lte',
-            'card_name': 'card__name',
+            'min_value': 'value__gte',
+            'max_value': 'value__lte',
+            'min_installment': 'installment__gte',
+            'max_installment': 'installment__lte',
+            'description': 'description__icontains',
         }
 
     def get_maped_filters(self):

@@ -5,7 +5,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from invoice.serializers.purchase import PurchaseDetailSerializer
 from invoice.services.card import CardPurchasesService
-from invoice.paginations import CardStandardPagination
+from invoice.paginations.card import CardStandardPagination
 from invoice.permissions import IsOwnerOrAdmin
 
 from accounts.permissions import TwoFactorsValidated, IsInternalUser
