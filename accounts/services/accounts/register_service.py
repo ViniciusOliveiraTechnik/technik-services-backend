@@ -1,5 +1,5 @@
 from accounts.serializers import AccountRegisterSerializer, AccountDetailSerializer
-from accounts.utils import OTPHelper
+from accounts.utils import OTPUtil
 from accounts.models import Account
 
 from typing import Dict, Any
@@ -12,7 +12,7 @@ class AccountRegisterService:
         
     def execute(self, data):
 
-        helper = OTPHelper()
+        Util = OTPUtil()
 
         serializer = AccountRegisterSerializer(data=data)
 
@@ -20,7 +20,7 @@ class AccountRegisterService:
 
         user = serializer.save()
 
-        user.otp_secret = helper.generate_otp_secret()
+        user.otp_secret = Util.generate_otp_secret()
         user.save()
 
         self.context['explicit_user'] = user

@@ -2,8 +2,6 @@ from invoice.models import Purchase
 
 from rest_framework import serializers
 
-from datetime import datetime
-
 class PurchaseDetailSerializer(serializers.ModelSerializer):
 
     account_name = serializers.SerializerMethodField()
@@ -20,4 +18,4 @@ class PurchaseDetailSerializer(serializers.ModelSerializer):
     
     def get_invoice_date(self, obj):
 
-        return f'{obj.invoice.invoice_date.strftime('%Y/%m')}-{obj.card.account.first_name} {obj.card.account.last_name}'
+        return f"{obj.invoice.invoice_date.strftime('%Y/%m')}-{obj.card.account.first_name} {obj.card.account.last_name}"
