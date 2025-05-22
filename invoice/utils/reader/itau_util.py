@@ -1,7 +1,6 @@
 import pandas as pd
 
 from invoice.models import Card, Purchase
-from invoice.serializers.purchase import PurchaseDetailSerializer
 
 from rest_framework.exceptions import ValidationError
 
@@ -45,7 +44,7 @@ class ItauReaderUtil:
         invoice['installment'] = invoice['installment'].fillna(1)
         invoice['installments'] = invoice['installments'].fillna(1)
 
-        invoice['card'] = 'VINICIUS OLIVEIRA' # just dev
+        invoice['card'] = 'VINICIUS OLIVEIRA'
 
         # Creating cards cache to find the card reference in database
 
@@ -54,17 +53,16 @@ class ItauReaderUtil:
         invoice['card'] = invoice['card'].map(self.get_card_object)
 
         invoice['invoice'] = self.invoice_instance
-
+        
         purchase_data = invoice.to_dict(orient='records')
 
         purchases = [Purchase(**purchase) for purchase in purchase_data]
 
         Purchase.objects.bulk_create(purchases)
 
-        purchases_instances = Purchase.objects.filter(invoice=self.invoice_instance) \
+        return Purchase.objects.filter(invoice=self.invoice_instance) \
         .select_related('card', 'invoice','card__account') \
         .only('id', 'description', 'value', 'purchase_date', 'installment', 'installments', 
               'invoice__invoice_date',
               'card__account__first_name', 'card__account__last_name')
 
-        return PurchaseDetailSerializer(purchases_instances, many=True).data

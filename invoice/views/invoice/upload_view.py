@@ -9,7 +9,7 @@ from accounts.permissions import TwoFactorsValidated, IsInternalUser
 from accounts.paginations import StandardResultsSetPagination
 
 from invoice.services.invoice import InvoiceUploadService
-from invoice.services.purchase import PurchaseCreateService
+from invoice.services.purchase import PurchaseBulkCreateService
 
 class InvoiceUploadView(APIView):
 
@@ -30,7 +30,7 @@ class InvoiceUploadView(APIView):
 
         invoice_instance, file = invoice_service.execute(data)
 
-        purchase_serivce = PurchaseCreateService(context=context, file=file, invoice_instance=invoice_instance)
+        purchase_serivce = PurchaseBulkCreateService(file, invoice_instance, context)
 
         queryset = purchase_serivce.execute()
 

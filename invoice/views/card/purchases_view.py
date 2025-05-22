@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from invoice.serializers.purchase import PurchaseDetailSerializer
+from invoice.serializers.purchase import PurchaseBaseSerializer
 from invoice.services.card import CardPurchasesService
 from invoice.paginations.card import CardStandardPagination
 from invoice.permissions import IsOwnerOrAdmin
@@ -15,7 +15,7 @@ class CardPurchasesView(ListAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [TwoFactorsValidated, IsInternalUser, IsAuthenticated, IsOwnerOrAdmin]
 
-    serializer_class = PurchaseDetailSerializer
+    serializer_class = PurchaseBaseSerializer
     pagination_class = CardStandardPagination
     lookup_field = 'pk'
 

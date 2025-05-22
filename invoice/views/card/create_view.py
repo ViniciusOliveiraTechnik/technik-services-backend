@@ -19,8 +19,6 @@ class CardCreateView(APIView):
         data = request.data
         context = {'request': request, 'request_user': request.user}
 
-        from django.db import connection
-
         service = CardCreateService(context)
 
         response_data = service.execute(data)

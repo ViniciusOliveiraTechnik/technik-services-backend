@@ -15,7 +15,7 @@ class DateUtil:
             min_date=Min('purchase_date'), 
             max_date=Max('purchase_date'))
         
-        min_date = range_date.get('min_date', today)
-        max_date = range_date.get('max_date', today)
+        min_date = range_date.get('min_date') or today
+        max_date = range_date.get('max_date') or today
 
         return min_date, max_date
