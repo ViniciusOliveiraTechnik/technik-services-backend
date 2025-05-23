@@ -32,3 +32,4 @@ class PurchaseCreateView(CreateAPIView):
               'card__account__first_name', 'card__account__last_name',
               'invoice__invoice_date') \
         .all()
+
