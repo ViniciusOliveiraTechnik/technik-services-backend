@@ -5,24 +5,22 @@ from rest_framework import status
 
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from invoice.services.card import CardCreateService
+from invoice.services.invoice import InvoiceCreateService
 
 from accounts.permissions import TwoFactorsValidated, IsInternalUser
 
-class CardCreateView(APIView):
+class InvoiceCreateView(APIView):
 
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated, TwoFactorsValidated, IsInternalUser]
+    permission_classes = [IsInternalUser, IsAuthenticated, TwoFactorsValidated]
 
     def post(self, request):
 
         data = request.data
         context = {'request': request, 'request_user': request.user}
 
-        service = CardCreateService(context)
+        service = InvoiceCreateService(context)
 
         response_data = service.execute(data)
 
         return Response(response_data, status=status.HTTP_201_CREATED)
-
-

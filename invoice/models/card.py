@@ -23,7 +23,7 @@ class Card(models.Model):
 
     account = models.ForeignKey(verbose_name='ID do usuário', to=Account, on_delete=models.CASCADE, related_name='cards')
 
-    name = models.CharField(verbose_name='Nome no cartão', default='', max_length=20)
+    name = models.CharField(verbose_name='Nome no cartão', default='', max_length=50)
     bank = models.TextField(verbose_name='Banco do cartão', choices=BankChoices.choices, default=BankChoices.ITAU)
 
     def __str__(self):

@@ -1,9 +1,8 @@
 from invoice.serializers.invoice import InvoiceUploadSerializer
-from invoice.models import Invoice
 
 class InvoiceUploadService:
 
-    def __init__(self, context=None):
+    def __init__(self, context = None):
         
         self.context = context or {}
 
