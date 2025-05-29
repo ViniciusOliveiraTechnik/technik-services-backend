@@ -87,7 +87,7 @@ class AccountRegisterSerializer(serializers.ModelSerializer):
 
         if self.service.check_exists('email', value):
 
-            raise serializers.ValidationError('Não foi possível concluir o cadastro com os dados fornecidos')
+            raise serializers.ValidationError('As credenciais não podem ser cadastradas')
         
         return value
 
@@ -110,7 +110,7 @@ class AccountRegisterSerializer(serializers.ModelSerializer):
 
         if not cpf_Util.validate(value):
 
-            raise serializers.ValidationError('CPF inválido')
+            raise serializers.ValidationError('O CPF inserido é inválido')
 
         normalized_cpf = cpf_Util.normalize(value)
 
@@ -118,7 +118,7 @@ class AccountRegisterSerializer(serializers.ModelSerializer):
 
         if self.service.check_exists('hashed_cpf', hashed_cpf):
 
-            raise serializers.ValidationError('Não foi possível concluir o cadastro com os dados fornecidos')
+            raise serializers.ValidationError('O CPF inserido é inválido')
         
         return normalized_cpf
 
