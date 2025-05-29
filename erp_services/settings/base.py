@@ -26,7 +26,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
-    'silk',
+    'corsheaders',
+    'silk', # Delete after development
+    'jwt_auth',
     'invoice',
     'accounts',
 ]
@@ -40,6 +42,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 TEMPLATES = [
@@ -61,7 +64,7 @@ TEMPLATES = [
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
     'AUTH_HEADER_TYPES': ('Bearer',),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
     'SLIDING_TOKEN_LIFETIME': timedelta(days=30),
@@ -113,6 +116,13 @@ LANGUAGE_CODE = 'pt-BR'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]
+
+CSRF_TRUSTED_ORIGINS = ["http://localhost:5173"]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

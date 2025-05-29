@@ -11,11 +11,12 @@ from typing import Any, Dict
 class AccountRegisterSerializer(serializers.ModelSerializer):
 
     cpf = serializers.CharField(required=True, write_only=True, min_length=11, max_length=14)
+    repeat_password = serializers.CharField(required=True, write_only=True, min_length=10)
 
     class Meta:
 
         model = Account
-        fields = '__all__'
+        fields = ['first_name', 'last_name', 'email', 'password', 'repeat_password', 'phone_number', 'cpf']
 
         extra_kwargs = {
 
@@ -46,6 +47,10 @@ class AccountRegisterSerializer(serializers.ModelSerializer):
         Raises:
             serializers.ValidationError: If any validation fails.
         """
+        if data["password"] != data["repeat_password"]:
+
+            raise serializers.ValidationError('As senhas devem coincidir')
+
         phone_number = str(data.get('phone_number')).strip()
         phone_number_region = str(data.get('phone_number_region', 'BR')).strip()
 

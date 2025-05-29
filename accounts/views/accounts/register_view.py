@@ -24,17 +24,12 @@ class AccountRegisterView(APIView):
         Returns:
             Response: A response indicating success or failure of the registration.
         """
-        try:
 
-            data = request.data
-            context = {'request': request}
+        data = request.data
+        context = {'request': request}
 
-            service = AccountRegisterService(context)
+        service = AccountRegisterService(context)
 
-            response_data = service.execute(data)
+        response_data = service.execute(data)
 
-            return Response({'message': 'Usuário criado com sucesso!', 'user': response_data}, status=status.HTTP_201_CREATED)
-        
-        except ValidationError as err:
-
-            return Response({'error': 'Não foi possível criar o usuário', 'detail': err.detail})
+        return Response({'message': 'Usuário criado com sucesso!', 'user': response_data}, status=status.HTTP_201_CREATED)

@@ -2,7 +2,7 @@ from rest_framework_simplejwt.tokens import AccessToken
 
 from datetime import timedelta
 
-class AuthenticationToken(AccessToken):
+class TemporaryAccessToken(AccessToken):
 
     lifetime = timedelta(minutes=5)
 
@@ -10,4 +10,3 @@ class AuthenticationToken(AccessToken):
         super().__init__()
 
         self['2fa_verified'] = False
-        self['role'] = 'prelogin'

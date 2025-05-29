@@ -1,36 +1,33 @@
 from accounts.serializers import AccountLoginSerializer, AccountDetailSerializer
-from accounts.tokens import AuthenticationToken
-from accounts.utils import OTPUtil, generate_totp_qrcode
+from accounts.tokens import TemporaryAccessToken
+from accounts.utils import OTPUtil, QrCodeUtil
 
 class AccountLoginService:
 
-    def __init__(self, context=None):
+    def __init__(self, context = None):
 
         self.context = context or {}
+        self.otp_util = OTPUtil()
 
     def execute(self, data):
-
-        Util = OTPUtil()
 
         serializer = AccountLoginSerializer(data=data)
 
         serializer.is_valid(raise_exception=True)
 
         user = serializer.validated_data.get('user')
-
-        temp_token = AuthenticationToken.for_user(user)
-
+        
+        temp_token = TemporaryAccessToken.for_user(user)
+        
         if not user.otp_secret:
             
-            user.otp_secret = Util.generate_otp_secret()
+            user.otp_secret = self.otp_util.generate_otp_secret()
             user.save()
 
-        totp_uri = Util.get_totp_uri(user.otp_secret, user.email)
+        totp_uri = self.otp_util.get_totp_uri(user.otp_secret, user.email)
 
-        qr_code = generate_totp_qrcode(totp_uri)
+        qr_code_util = QrCodeUtil(totp_uri)
 
-        self.context['explicit_user'] = user
+        qr_code_img = qr_code_util.generate()
 
-        response_data = AccountDetailSerializer(user, context=self.context).data
-
-        return {'access': str(temp_token), 'qr_code': qr_code, 'user': response_data}
+        return {'access_token': str(temp_token), 'qr_code': qr_code_img}

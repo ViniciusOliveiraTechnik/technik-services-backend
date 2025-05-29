@@ -24,7 +24,7 @@ class OTPUtil:
 
         return pyotp.totp.TOTP(secret).provisioning_uri(email, issuer)
 
-    def verify_otp(self, otp_code: str, secret: bytes):
+    def verify_otp(self, otp_code: str, secret: bytes) -> bool:
         
         secret = self.crypto.decrypt(secret)
 

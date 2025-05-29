@@ -1,42 +1,38 @@
 from rest_framework.views import APIView
-from rest_framework.exceptions import ValidationError, NotFound
 from rest_framework.response import Response
-from rest_framework import status
 from rest_framework.permissions import AllowAny
 
-from rest_framework_simplejwt.exceptions import InvalidToken
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from accounts.utils import time_performance
 from accounts.services import AccountTwoFactorsService
 
-
 class AccountTwoFactorsView(APIView):
 
+    authentication_classes = [JWTAuthentication]
     permission_classes = [AllowAny]
     
     @time_performance(detail_name="Validação 2FA do Usuário")
     def post(self, request):
         
-        try:
+        data = request.data
+        temporary_auth_token = str(request.auth)
+        context = {'request': request, 'request_user': request.user}
 
-            data = request.data
-            auth = str(request.auth)
-            context = {'request': request}
+        service = AccountTwoFactorsService(context)
 
-            service = AccountTwoFactorsService(context)
+        result = service.execute(data, temporary_auth_token)
 
-            response_data = service.execute(data, auth)
+        refresh_token = result.pop('refresh_token')
 
-            return Response(response_data, status=status.HTTP_200_OK)
-        
-        except ValidationError as err:
+        response = Response(result)
 
-            return Response({'error': 'O código de autenticação está incorreto ou expirou. Tente novamente.', 'detail': err.detail}, status=status.HTTP_400_BAD_REQUEST)
-        
-        except NotFound as err:
+        response.set_cookie(
+            key='refresh_token',
+            value=refresh_token,
+            httponly=True,
+            samesite='Strict',
+            secure=True
+        )
 
-            return Response({'error': 'Usuário não encontrado', 'detail': err.detail}, status=status.HTTP_404_NOT_FOUND)
-
-        except InvalidToken as err:
-
-            return Response({'error': 'Token inválido ou expirado', 'detail': err.detail}, status=status.HTTP_401_UNAUTHORIZED)
+        return response

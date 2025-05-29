@@ -16,7 +16,3 @@ class JWTUtil:
         refresh['2fa_verified'] = True
 
         return {'refresh': str(refresh), 'access': str(refresh.access_token)}
-    
-    def generate_temporary_token(self, user):
-
-        pass

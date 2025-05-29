@@ -75,6 +75,13 @@ class Account(AbstractUser):
         """
         verbose_name = 'Usuário'
         verbose_name_plural = 'Usuários'
+        constraints = [
+            models.UniqueConstraint(
+                name='Unique User',
+                fields=['first_name', 'last_name', 'email', 'phone_number', 'hashed_cpf'], 
+                violation_error_message='Não é possivel adicionar esse usuário'
+                )
+        ]
 
     class HierarchyOptions(models.TextChoices):
         """
@@ -90,23 +97,24 @@ class Account(AbstractUser):
     # fields
     username = None # Deactivating username
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True, null=False, editable=False)
+    id = models.UUIDField(verbose_name='ID do Usuário', primary_key=True, default=uuid.uuid4, unique=True, null=False, editable=False)
     
-    first_name = models.CharField('Nome', max_length=80)
-    last_name = models.CharField('Sobrenome', max_length=80)
+    first_name = models.CharField(verbose_name='Nome', max_length=80)
+    last_name = models.CharField(verbose_name='Sobrenome', max_length=80)
     
-    job_title = models.CharField('Cargo', max_length=150, default='')
-    hierarchy_level = models.CharField('Nível hierárquico', choices=HierarchyOptions.choices, max_length=20, default='') 
+    job_title = models.CharField(verbose_name='Cargo', max_length=150, default='')
+    hierarchy_level = models.CharField(verbose_name='Nível hierárquico', choices=HierarchyOptions.choices, max_length=20, default='') 
 
-    email = models.EmailField("Email", unique=True)
+    email = models.EmailField(verbose_name="Email")
 
-    otp_secret = models.BinaryField(blank=True, null=True)
+    otp_secret = models.BinaryField(verbose_name='Segredo OTP', blank=True, null=True)
+    is_authenticated = models.BooleanField(verbose_name='Usuário autenticado', default=False)
 
-    encrypted_cpf = models.BinaryField("CPF Criptografado", unique=True, null=True, blank=True)
-    hashed_cpf = models.CharField("Hash do CPF", max_length=64, unique=True, null=True, blank=True)
+    encrypted_cpf = models.BinaryField(verbose_name="CPF Criptografado", null=True, blank=True)
+    hashed_cpf = models.CharField(verbose_name="Hash do CPF", max_length=64, null=True, blank=True)
 
-    phone_number = models.CharField('Contato', max_length=20, unique=True, default='')
-    phone_number_region = models.CharField('Região', max_length=2, default='BR')
+    phone_number = models.CharField(verbose_name='Contato', max_length=20, default='')
+    phone_number_region = models.CharField(verbose_name='Região', max_length=2, default='BR')
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ['first_name', 'last_name', 'phone_number']
@@ -114,7 +122,6 @@ class Account(AbstractUser):
     # Manager
     objects = CustomUserManager()
     
-    # Instance methods
     def __str__(self) -> str:
 
         return f"{self.first_name} {self.last_name}"

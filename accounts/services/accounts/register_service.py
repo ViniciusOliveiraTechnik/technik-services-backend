@@ -12,7 +12,7 @@ class AccountRegisterService:
         
     def execute(self, data):
 
-        Util = OTPUtil()
+        util = OTPUtil()
 
         serializer = AccountRegisterSerializer(data=data)
 
@@ -20,7 +20,7 @@ class AccountRegisterService:
 
         user = serializer.save()
 
-        user.otp_secret = Util.generate_otp_secret()
+        user.otp_secret = util.generate_otp_secret()
         user.save()
 
         self.context['explicit_user'] = user
@@ -31,6 +31,7 @@ class AccountRegisterService:
 
         cpf = validated_data.pop('cpf')
         password = validated_data.pop('password')
+        del validated_data['repeat_password']
 
         user = Account(**validated_data)
 

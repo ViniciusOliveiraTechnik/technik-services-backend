@@ -1,2 +1,2 @@
 from .action_token import ActionToken
-from .authentication_token import AuthenticationToken
+from .temporary_token import TemporaryAccessToken
