@@ -5,7 +5,9 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from django.db.models import Sum, Count
 
-from accounts.permissions import IsInternalUser, TwoFactorsValidated
+from accounts.permissions import IsInternalUser
+
+from jwt_auth.permissions import IsTwoFactorsVerified
 
 from invoice.models import Invoice
 from invoice.serializers.invoice import InvoiceBaseSerializer
@@ -13,7 +15,7 @@ from invoice.serializers.invoice import InvoiceBaseSerializer
 class InvoiceConfigurationView(RetrieveUpdateDestroyAPIView):
 
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated, IsInternalUser, TwoFactorsValidated]
+    permission_classes = [IsAuthenticated, IsInternalUser, IsTwoFactorsVerified]
 
     serializer_class = InvoiceBaseSerializer 
     lookup_field = 'pk'

@@ -6,7 +6,8 @@ from rest_framework.permissions import IsAuthenticated
 
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from accounts.permissions import TwoFactorsValidated
+from jwt_auth.permissions import IsTwoFactorsVerified
+
 from accounts.paginations import StandardResultsSetPagination
 from accounts.serializers import AccountDetailSerializer
 from accounts.models import Account
@@ -16,7 +17,7 @@ class AccountListView(ListAPIView):
     
     queryset = Account.objects.all().order_by('first_name')
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated, TwoFactorsValidated]
+    permission_classes = [IsAuthenticated, IsTwoFactorsVerified]
     serializer_class = AccountDetailSerializer
     pagination_class = StandardResultsSetPagination
 

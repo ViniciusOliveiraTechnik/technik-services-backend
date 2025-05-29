@@ -1,6 +1,9 @@
-from accounts.serializers import AccountLoginSerializer, AccountDetailSerializer
+from accounts.serializers import AccountLoginSerializer
 from accounts.tokens import TemporaryAccessToken
-from accounts.utils import OTPUtil, QrCodeUtil
+
+from accounts.utils import QrCodeUtil
+
+from jwt_auth.utils.two_factors import OTPUtil
 
 class AccountLoginService:
 

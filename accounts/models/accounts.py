@@ -127,24 +127,16 @@ class Account(AbstractUser):
         return f"{self.first_name} {self.last_name}"
     
     def set_cpf(self, cpf: str):
-        """
-        Store the encrypted CPF in the system
 
-        Args:
-            cpf (str): The CPF to be stored.
-        
-        Raises:
-            ValueError: If the CPF is not provided.
-        """
         if not cpf:
 
             raise ValueError('CPF is empty')
         
-        Util = CPFUtil()
+        cpf_util = CPFUtil()
 
-        self.encrypted_cpf = Util.encrypt(cpf)
+        self.encrypted_cpf = cpf_util.encrypt(cpf)
 
-        self.hashed_cpf = Util.create_hash(cpf)
+        self.hashed_cpf = cpf_util.create_hash(cpf)
 
     def check_cpf(self, cpf: str) -> bool:
 
@@ -152,6 +144,6 @@ class Account(AbstractUser):
 
             raise ValueError('CPF is empty')
         
-        Util = CPFUtil()
+        cpf_util = CPFUtil()
 
-        return self.hashed_cpf == Util.create_hash(cpf)
+        return self.hashed_cpf == cpf_util.create_hash(cpf)

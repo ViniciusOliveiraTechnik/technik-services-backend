@@ -5,8 +5,10 @@ from rest_framework import status
 
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from accounts.permissions import TwoFactorsValidated, IsInternalUser
+from accounts.permissions import IsInternalUser
 from accounts.paginations import StandardResultsSetPagination
+
+from jwt_auth.permissions import IsTwoFactorsVerified
 
 from invoice.services.invoice import InvoiceUploadService
 from invoice.services.purchase import PurchaseBulkCreateService
@@ -14,7 +16,7 @@ from invoice.services.purchase import PurchaseBulkCreateService
 class InvoiceUploadView(APIView):
 
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated, TwoFactorsValidated, IsInternalUser]
+    permission_classes = [IsAuthenticated, IsTwoFactorsVerified, IsInternalUser]
     pagination_class = StandardResultsSetPagination
 
     def post(self, request):

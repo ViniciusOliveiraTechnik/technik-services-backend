@@ -7,12 +7,14 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from invoice.services.card import CardCreateService
 
-from accounts.permissions import TwoFactorsValidated, IsInternalUser
+from accounts.permissions import IsInternalUser
+
+from jwt_auth.permissions import IsTwoFactorsVerified
 
 class CardCreateView(APIView):
 
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated, TwoFactorsValidated, IsInternalUser]
+    permission_classes = [IsAuthenticated, IsTwoFactorsVerified, IsInternalUser]
 
     def post(self, request):
 

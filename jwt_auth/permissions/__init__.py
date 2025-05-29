@@ -1,0 +1,1 @@
+from .two_factors_permission import ( IsTwoFactorsVerified )

@@ -13,15 +13,7 @@ class PhoneUtil:
         self.default_region = default_region
 
     def normalize(self, phone: str) -> str:
-        """
-        Normalize a phone number to E.164 format.
 
-        Args:
-            phone (str): Phone number as a string.
-
-        Returns:
-            str: Phone number in E.164 format if valid, else digits-only version.
-        """
         if not phone or not isinstance(phone, str):
 
             raise ValueError('Número de telefone deve ser passado como string')
@@ -43,15 +35,7 @@ class PhoneUtil:
             return digits_only
 
     def validate(self, phone: str) -> bool:
-        """
-        Validate if a phone number is valid in the given region.
 
-        Args:
-            phone (str): Phone number as a string.
-
-        Returns:
-            bool: True if valid, False otherwise.
-        """
         if not phone or not isinstance(phone, str):
 
             raise ValueError('Número de telefone deve ser passado como string')
@@ -69,15 +53,7 @@ class PhoneUtil:
             return False
 
     def mask(self, phone: str) -> str:
-        """
-        Mask the phone number using international format.
 
-        Args:
-            phone (str): Phone number in E.164 format or raw.
-
-        Returns:
-            str: Phone number in INTERNATIONAL format if valid, else input value.
-        """
         if not phone or not isinstance(phone, str):
 
             raise ValueError('Número de telefone deve ser passado como string')

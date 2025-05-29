@@ -6,12 +6,14 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from invoice.serializers.purchase import PurchaseBaseSerializer
 from invoice.models import Purchase
 
-from accounts.permissions import IsInternalUser, TwoFactorsValidated
+from accounts.permissions import IsInternalUser
+
+from jwt_auth.permissions import IsTwoFactorsVerified
 
 class PurchaseCreateView(CreateAPIView):
 
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsInternalUser, TwoFactorsValidated, IsAuthenticated]
+    permission_classes = [IsInternalUser, IsTwoFactorsVerified, IsAuthenticated]
 
     serializer_class = PurchaseBaseSerializer
 

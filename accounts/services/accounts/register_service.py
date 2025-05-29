@@ -1,6 +1,7 @@
 from accounts.serializers import AccountRegisterSerializer, AccountDetailSerializer
-from accounts.utils import OTPUtil
 from accounts.models import Account
+
+from jwt_auth.utils.two_factors import OTPUtil
 
 from typing import Dict, Any
 

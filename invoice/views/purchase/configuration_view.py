@@ -3,7 +3,9 @@ from rest_framework.permissions import IsAuthenticated
 
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from accounts.permissions import IsInternalUser, TwoFactorsValidated
+from accounts.permissions import IsInternalUser
+
+from jwt_auth.permissions import IsTwoFactorsVerified
 
 from invoice.models import Purchase
 from invoice.serializers.purchase import PurchaseBaseSerializer
@@ -11,7 +13,7 @@ from invoice.serializers.purchase import PurchaseBaseSerializer
 class PurchaseConfigurationView(RetrieveUpdateDestroyAPIView):
 
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsInternalUser, TwoFactorsValidated, IsAuthenticated]
+    permission_classes = [IsInternalUser, IsTwoFactorsVerified, IsAuthenticated]
 
     serializer_class = PurchaseBaseSerializer
 

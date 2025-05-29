@@ -1,15 +1,15 @@
 from accounts.serializers import PasswordResetSerializer
-from accounts.utils import get_object
+from accounts.utils import AccountUtil
 
 class PasswordResetService:
 
     def __init__(self):
         
-        pass
+        self.account_util = AccountUtil()
 
     def execute(self, data, pk):
 
-        user = get_object(pk)
+        user = self.account_util.get_object(pk)
 
         serializer = PasswordResetSerializer(user, data=data)
 

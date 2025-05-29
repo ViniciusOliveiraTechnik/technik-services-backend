@@ -1,5 +1,7 @@
 from accounts.services import PasswordResetService
-from accounts.permissions import TwoFactorsValidated, IsOwnerOrAdmin
+from accounts.permissions import IsOwnerOrAdmin
+
+from jwt_auth.permissions import IsTwoFactorsVerified
 
 from rest_framework.exceptions import ValidationError, NotFound
 from rest_framework.views import APIView
@@ -12,7 +14,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 class PasswordResetView(APIView):
 
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated, TwoFactorsValidated, IsOwnerOrAdmin]
+    permission_classes = [IsAuthenticated, IsTwoFactorsVerified, IsOwnerOrAdmin]
 
     def post(self, request, pk):
 

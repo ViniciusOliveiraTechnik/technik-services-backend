@@ -1,11 +1,11 @@
-from jwt_auth.utils.tokens import AuthUtil
+from jwt_auth.utils.tokens import JwtUtil
 
 class RefreshTokenService:
 
     def __init__(self, context = None):
         
         self.context = context or {}
-        self.auth_util = AuthUtil()
+        self.auth_util = JwtUtil()
 
     def execute(self, refresh_token):
 

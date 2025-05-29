@@ -2,11 +2,13 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
+
     path('admin/', admin.site.urls),
     path('silk/', include('silk.urls', namespace='silk')),
-    path('', include('invoice.urls')),
     path('auth/', include('jwt_auth.urls')),
     path('accounts/', include('accounts.urls')),
+    path('financial/', include('invoice.urls')),
+
 ]
 
 from django.conf import settings

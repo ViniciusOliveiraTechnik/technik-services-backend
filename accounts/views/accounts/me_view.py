@@ -5,13 +5,15 @@ from rest_framework import status
 
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from accounts.permissions import TwoFactorsValidated, IsOwnerOrAdmin
+from accounts.permissions import IsOwnerOrAdmin
 from accounts.services import AccountMeService
+
+from jwt_auth.permissions import IsTwoFactorsVerified
 
 class AccountMeView(APIView):
 
     authentication_classes = [JWTAuthentication]
-    permission_classes = [TwoFactorsValidated, IsOwnerOrAdmin, IsAuthenticated]
+    permission_classes = [IsTwoFactorsVerified, IsOwnerOrAdmin, IsAuthenticated]
 
     def get(self, request):
 

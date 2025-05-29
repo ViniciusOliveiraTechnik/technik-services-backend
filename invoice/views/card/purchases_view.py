@@ -8,12 +8,14 @@ from invoice.services.card import CardPurchasesService
 from invoice.paginations.card import CardStandardPagination
 from invoice.permissions import IsOwnerOrAdmin
 
-from accounts.permissions import TwoFactorsValidated, IsInternalUser
+from accounts.permissions import IsInternalUser
+
+from jwt_auth.permissions import IsTwoFactorsVerified
 
 class CardPurchasesView(ListAPIView):
 
     authentication_classes = [JWTAuthentication]
-    permission_classes = [TwoFactorsValidated, IsInternalUser, IsAuthenticated, IsOwnerOrAdmin]
+    permission_classes = [IsTwoFactorsVerified, IsInternalUser, IsAuthenticated, IsOwnerOrAdmin]
 
     serializer_class = PurchaseBaseSerializer
     pagination_class = CardStandardPagination
