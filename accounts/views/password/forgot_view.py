@@ -7,7 +7,7 @@ from rest_framework.exceptions import ValidationError
 from accounts.services import PasswordForgotService
 from accounts.utils import time_performance
 
-class PasswordForgotRequestView(APIView):
+class PasswordForgotView(APIView):
 
     permission_classes = [AllowAny]
 
@@ -15,15 +15,10 @@ class PasswordForgotRequestView(APIView):
     def post(self, request):
 
         data = request.data
+        context = {'request': request, 'request_user': request.user}
 
-        service = PasswordForgotService()
+        service = PasswordForgotService(context)
 
-        try:
+        response_data = service.execute(data)
 
-            response_data = service.execute_request(data)
-
-            return Response(response_data, status=status.HTTP_200_OK)
-
-        except ValidationError as err:
-
-            return Response({'error': 'Os dados enviados são inválidos', 'detail': err.detail}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(response_data, status=status.HTTP_200_OK)

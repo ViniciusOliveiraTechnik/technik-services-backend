@@ -1,4 +1,4 @@
-from accounts.serializers import AccountRegisterSerializer, AccountDetailSerializer
+from accounts.serializers import AccountDetailSerializer, AccountRegisterSerializer
 from accounts.models import Account
 
 from jwt_auth.utils.two_factors import OTPUtil
@@ -13,7 +13,7 @@ class AccountRegisterService:
         
     def execute(self, data):
 
-        util = OTPUtil()
+        otp_util = OTPUtil()
 
         serializer = AccountRegisterSerializer(data=data)
 
@@ -21,7 +21,8 @@ class AccountRegisterService:
 
         user = serializer.save()
 
-        user.otp_secret = util.generate_otp_secret()
+        user.otp_secret = otp_util.generate_otp_secret()
+        
         user.save()
 
         self.context['explicit_user'] = user

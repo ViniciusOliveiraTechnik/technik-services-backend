@@ -1,15 +1,13 @@
-from rest_framework_simplejwt.tokens import Token
+from rest_framework_simplejwt.tokens import AccessToken
 
 from datetime import timedelta
 
-class ActionToken(Token):
+class ActionToken(AccessToken):
 
-    token_type = 'action'
-    lifetime = timedelta(minutes=15)
+    lifetime = timedelta(minutes=30)
 
-    def __init__(self, user, action_type: str = ""):
+    def __init__(self, action, user_id):
         super().__init__()
 
-        self['user_id'] = str(user.id)
-        self['action'] = action_type
-        self['email'] = user.email
+        self['action'] = action
+        self['user_id'] = user_id

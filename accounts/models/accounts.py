@@ -3,8 +3,6 @@ from django.contrib.auth.models import AbstractUser
 
 from django.db import models
 
-from accounts.utils import CPFUtil
-
 import uuid
 
 class CustomUserManager(BaseUserManager):
@@ -113,7 +111,7 @@ class Account(AbstractUser):
     encrypted_cpf = models.BinaryField(verbose_name="CPF Criptografado", null=True, blank=True)
     hashed_cpf = models.CharField(verbose_name="Hash do CPF", max_length=64, null=True, blank=True)
 
-    phone_number = models.CharField(verbose_name='Contato', max_length=20, default='')
+    phone_number = models.CharField(verbose_name='Contato', max_length=20)
     phone_number_region = models.CharField(verbose_name='Região', max_length=2, default='BR')
 
     USERNAME_FIELD = "email"
@@ -126,24 +124,24 @@ class Account(AbstractUser):
 
         return f"{self.first_name} {self.last_name}"
     
-    def set_cpf(self, cpf: str):
+    # def set_cpf(self, cpf: str):
 
-        if not cpf:
+    #     if not cpf:
 
-            raise ValueError('CPF is empty')
+    #         raise ValueError('CPF is empty')
         
-        cpf_util = CPFUtil()
+    #     cpf_util = CPFUtil()
 
-        self.encrypted_cpf = cpf_util.encrypt(cpf)
+    #     self.encrypted_cpf = cpf_util.encrypt(cpf)
 
-        self.hashed_cpf = cpf_util.create_hash(cpf)
+    #     self.hashed_cpf = cpf_util.create_hash(cpf)
 
-    def check_cpf(self, cpf: str) -> bool:
+    # def check_cpf(self, cpf: str) -> bool:
 
-        if not cpf:
+    #     if not cpf:
 
-            raise ValueError('CPF is empty')
+    #         raise ValueError('CPF is empty')
         
-        cpf_util = CPFUtil()
+    #     cpf_util = CPFUtil()
 
-        return self.hashed_cpf == cpf_util.create_hash(cpf)
+    #     return self.hashed_cpf == cpf_util.create_hash(cpf)

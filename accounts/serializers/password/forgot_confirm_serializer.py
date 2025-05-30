@@ -1,14 +1,22 @@
 from rest_framework import serializers
 
-from django.contrib.auth.password_validation import validate_password
-
 class PasswordForgotConfirmSerializer(serializers.Serializer):
 
-    password = serializers.CharField(write_only=True)
+    password = serializers.CharField(required=True, write_only=True)
+    same_password = serializers.CharField(required=True, write_only=True)
 
-    def validate_password(self, value):
+    def validate(self, attrs):
 
-        validate_password(value)
+        password = str(attrs.get('password')).strip()
+        
+        same_password = str(attrs.get('same_password')).strip()
 
-        return value
-    
+        if password != same_password:
+
+            raise serializers.ValidationError('As senhas devem coincidir')
+        
+        attrs['password'] = password
+
+        attrs['same_password'] = same_password
+
+        return attrs

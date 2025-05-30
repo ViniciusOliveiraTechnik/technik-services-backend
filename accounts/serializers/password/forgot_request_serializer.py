@@ -1,5 +1,5 @@
 from rest_framework import serializers
 
-class PasswordForgotRequestSerializer(serializers.Serializer):
+class PasswordForgotSerializer(serializers.Serializer):
 
     email = serializers.EmailField(required=True)

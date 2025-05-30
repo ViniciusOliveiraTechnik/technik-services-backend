@@ -11,7 +11,7 @@ class CPFUtil:
     def __init__(self):
         
         self.cpf_validator = CPF()
-        self.crypto_Util = CryptoUtil()
+        self.crypto_util = CryptoUtil()
 
     def normalize(self, cpf: str) -> str:
         
@@ -59,8 +59,8 @@ class CPFUtil:
 
         normalized_cpf = self.normalize(cpf)
 
-        return self.crypto_Util.encypt(normalized_cpf)
+        return self.crypto_util.encypt(normalized_cpf)
     
     def decrypt(self, encrypted_cpf: bytes):
 
-        return self.crypto_Util.decrypt(encrypted_cpf)
+        return self.crypto_util.decrypt(encrypted_cpf)

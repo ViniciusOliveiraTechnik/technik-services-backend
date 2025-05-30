@@ -39,6 +39,10 @@ class TwoFactorsService:
 
                     raise ValidationError({'otp_code': ['O código de autenticação é inválido ou expirado']})
 
+                user.is_authenticated = True
+
+                user.save()
+
                 tokens = self.jwt_util.generate_tokens(user)
 
                 return {'access_token': tokens['access_token'], 'refresh_token': tokens['refresh_token']}

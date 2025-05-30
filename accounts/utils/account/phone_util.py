@@ -4,25 +4,25 @@ from phonenumbers.phonenumberutil import NumberParseException
 
 class PhoneUtil:
 
-    def __init__(self, default_region: str = 'BR'):
+    def __init__(self, phone_number_region: str = 'BR'):
 
-        if not default_region or not isinstance(default_region, str):
+        if not phone_number_region or not isinstance(phone_number_region, str):
 
-            raise ValueError('Região padrão deve ser uma string válida')
+            raise ValueError('A região de contato deve ser um valor de texto válido')
         
-        self.default_region = default_region
+        self.phone_number_region = phone_number_region
 
-    def normalize(self, phone: str) -> str:
+    def normalize(self, phone_number: str) -> str:
 
-        if not phone or not isinstance(phone, str):
+        if not phone_number or not isinstance(phone_number, str):
 
-            raise ValueError('Número de telefone deve ser passado como string')
+            raise ValueError('O número de contato deve ser um valor de texto válido')
 
-        digits_only = re.sub(r'\D', '', phone)
+        digits_only = re.sub(r'\D', '', phone_number)
 
         try:
 
-            parsed_phone = phonenumbers.parse(digits_only, self.default_region)
+            parsed_phone = phonenumbers.parse(digits_only, self.phone_number_region)
 
             if not phonenumbers.is_valid_number(parsed_phone):
 
@@ -44,7 +44,7 @@ class PhoneUtil:
 
         try:
 
-            parsed_phone = phonenumbers.parse(digits_only, self.default_region)
+            parsed_phone = phonenumbers.parse(digits_only, self.phone_number_region)
 
             return phonenumbers.is_valid_number(parsed_phone)
         
@@ -60,7 +60,7 @@ class PhoneUtil:
 
         try:
 
-            parsed_phone = phonenumbers.parse(phone, self.default_region)
+            parsed_phone = phonenumbers.parse(phone, self.phone_number_region)
 
             if not phonenumbers.is_valid_number(parsed_phone):
 

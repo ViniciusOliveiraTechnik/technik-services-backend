@@ -6,21 +6,14 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 @shared_task()
-def send_email_to_reset_password(user_id, token):
+def send_email_to_reset_password(access_token, user_email):
 
-    try:
-
-        user = Account.objects.get(id=user_id)
-
-    except Account.DoesNotExist:
-        return
-
-    reset_link = f'http://localhost:8000/accounts/reset-password-confirmation/?token={token}'
+    reset_link = f'http://localhost:5173/forgot-password-confirm/?auth={access_token}'
     
-    subject = 'Solicitação de restauração de senha'
-    message = f'Clique no link para restaurar a sua senha: {reset_link}'
+    subject = 'Solicitação de recuperação de senha'
+    message = f'Clique no link para recuperar a sua senha: {reset_link}'
 
-    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user_email])
 
 @shared_task()
 def send_email_to_notify_password_change(user_id):

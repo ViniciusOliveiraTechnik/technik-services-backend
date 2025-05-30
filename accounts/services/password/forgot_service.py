@@ -1,4 +1,4 @@
-from accounts.serializers import PasswordForgotRequestSerializer, PasswordForgotConfirmSerializer
+from accounts.serializers import PasswordForgotSerializer, PasswordForgotConfirmSerializer
 from accounts.tokens import ActionToken
 from accounts.models import Account
 from accounts.tasks import send_email_to_reset_password, send_email_to_notify_password_change
@@ -10,12 +10,13 @@ from rest_framework_simplejwt.exceptions import TokenError, InvalidToken, Expire
 
 class PasswordForgotService:
 
-    def __init__(self):
-        pass
+    def __init__(self, context = None):
+        
+        self.context = context or {}
 
-    def execute_request(self, data):
+    def execute(self, data):
 
-        serializer = PasswordForgotRequestSerializer(data=data)
+        serializer = PasswordForgotSerializer(data=data)
 
         serializer.is_valid(raise_exception=True)
 
@@ -25,9 +26,9 @@ class PasswordForgotService:
 
             user = Account.objects.get(email=email)
 
-            token = str(ActionToken(user, 'reset_password'))
+            access_token = ActionToken(action='forgot_password', user_id=str(user.id))
 
-            send_email_to_reset_password.delay(user.id, token)
+            send_email_to_reset_password.delay(str(access_token), user.email)
 
         except Account.DoesNotExist:
 
@@ -35,44 +36,44 @@ class PasswordForgotService:
 
         return {'message': 'Se as credenciais existirem, um link de restauração de senha será enviado à caixa de email'}
     
-    def execute_confirm(self, data, token_param):
+    # def execute_confirm(self, data, token_param):
 
-        if not token_param:
+    #     if not token_param:
 
-            raise AuthenticationFailed
+    #         raise AuthenticationFailed
 
-        serializer = PasswordForgotConfirmSerializer(data=data)
+    #     serializer = PasswordForgotConfirmSerializer(data=data)
 
-        serializer.is_valid(raise_exception=True)
+    #     serializer.is_valid(raise_exception=True)
 
-        password = serializer.validated_data.get('password')
+    #     password = serializer.validated_data.get('password')
 
-        try:
+    #     try:
 
-            token = UntypedToken(token_param)
+    #         token = UntypedToken(token_param)
 
-            user_id = token.get('user_id')
-            action = token.get('action')
+    #         user_id = token.get('user_id')
+    #         action = token.get('action')
 
-            if action != 'reset_password':
+    #         if action != 'reset_password':
 
-                raise TokenError
+    #             raise TokenError
 
-            try:
+    #         try:
 
-                user = Account.objects.get(id=user_id)
+    #             user = Account.objects.get(id=user_id)
 
-                user.set_password(password)
-                user.save()
+    #             user.set_password(password)
+    #             user.save()
 
-                send_email_to_notify_password_change.delay(user.id)
+    #             send_email_to_notify_password_change.delay(user.id)
 
-                return {'message': 'Senha alterada com sucesso'}
+    #             return {'message': 'Senha alterada com sucesso'}
 
-            except Account.DoesNotExist:
+    #         except Account.DoesNotExist:
 
-                raise NotFound
+    #             raise NotFound
 
-        except (ExpiredTokenError, InvalidToken):
+    #     except (ExpiredTokenError, InvalidToken):
 
-            raise InvalidToken
+    #         raise InvalidToken

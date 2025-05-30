@@ -6,7 +6,7 @@ from rest_framework.exceptions import NotFound, AuthenticationFailed, Validation
 
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 
-from accounts.services import PasswordForgotService
+from accounts.services import PasswordForgotConfirmService
 from accounts.utils import time_performance
 
 class PasswordForgotConfirmView(APIView):
@@ -17,32 +17,11 @@ class PasswordForgotConfirmView(APIView):
     def post(self, request):
         
         data = request.data
-        tokem_param = request.query_params.get('token')
+        access_token = str(request.query_params.get('auth'))
+        context = {'request': request, 'request_user': request.user}
 
-        service = PasswordForgotService()
+        service =  PasswordForgotConfirmService(context)
 
-        try:
+        response_data = service.execute(data, access_token)
 
-            response_data = service.execute_confirm(data, tokem_param)
-
-            return Response(response_data, status=status.HTTP_200_OK)
-        
-        except ValidationError as err:
-
-            return Response({'error': 'Credenciais passadas são inválidas', 'detail': err.detail}, status=status.HTTP_400_BAD_REQUEST)
-        
-        except AuthenticationFailed as err:
-
-            return Response({'error': 'Não foi possível localizar o token de acesso', 'detail': err.detail}, status=status.HTTP_401_UNAUTHORIZED)
-        
-        except TokenError as err:
-
-            return Response({'error': 'Ação do token não compatível', 'detail': err.detail}, status=status.HTTP_401_UNAUTHORIZED)
-
-        except InvalidToken as err:
-
-            return Response({'error': 'O token de acesso expirou ou é inválido. Tente novamente', 'detail': err.detail}, status=status.HTTP_401_UNAUTHORIZED)
-        
-        except NotFound as err:
-
-            return Response({'error': 'Usuário não encontrado', 'detail': err.detail}, status=status.HTTP_404_NOT_FOUND)
+        return Response(response_data, status=status.HTTP_200_OK)
