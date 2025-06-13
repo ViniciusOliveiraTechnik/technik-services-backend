@@ -1,15 +1,17 @@
 from accounts.serializers import AccountLoginSerializer
-from accounts.tokens import TemporaryAccessToken
 
-from accounts.utils import QrCodeUtil
+from jwt_auth.utils import JwtUtil, OTPUtil, QrCodeUtil
 
-from jwt_auth.utils.two_factors import OTPUtil
+from rest_framework_simplejwt.tokens import RefreshToken
+
+from datetime import timedelta
 
 class AccountLoginService:
 
     def __init__(self, context = None):
 
         self.context = context or {}
+        self.jwt_util = JwtUtil()
         self.otp_util = OTPUtil()
 
     def execute(self, data):
@@ -20,17 +22,25 @@ class AccountLoginService:
 
         user = serializer.validated_data.get('user')
         
-        temp_token = TemporaryAccessToken.for_user(user)
+        refresh_token = RefreshToken.for_user(user)
+        refresh_token.set_exp(lifetime=timedelta(minutes=15))
+
+        if not user.is_authenticated:
+
+            if not user.otp_secret:
+
+                user.otp_secret = self.otp_util.generate_otp_secret()
+
+                user.save()
+
+            totp_uri = self.otp_util.get_totp_uri(user.otp_secret, user.email)
+
+            qr_code = QrCodeUtil(totp_uri).generate()
+
+            refresh_token['action'] = 'mfa_setup'
+
+            return {'access_token': str(refresh_token.access_token), 'refresh_token': str(refresh_token), 'qr_code': qr_code}
         
-        if not user.otp_secret:
-            
-            user.otp_secret = self.otp_util.generate_otp_secret()
-            user.save()
+        refresh_token['action'] = 'mfa_validate'
 
-        totp_uri = self.otp_util.get_totp_uri(user.otp_secret, user.email)
-
-        qr_code_util = QrCodeUtil(totp_uri)
-
-        qr_code_img = qr_code_util.generate()
-
-        return {'access_token': str(temp_token), 'qr_code': qr_code_img}
+        return {'access_token': str(refresh_token.access_token), 'refresh_token': str(refresh_token)}

@@ -5,7 +5,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from accounts.permissions import IsInternalUser
 
-from jwt_auth.permissions import IsTwoFactorsVerified
+from jwt_auth.permissions import MFAActive
 
 from invoice.services.purchase import PurchaseListService
 from invoice.serializers.purchase import PurchaseBaseSerializer

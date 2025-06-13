@@ -9,12 +9,12 @@ from invoice.services.card import CardCreateService
 
 from accounts.permissions import IsInternalUser
 
-from jwt_auth.permissions import IsTwoFactorsVerified
+from jwt_auth.permissions import MFAActive
 
 class CardCreateView(APIView):
 
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated, IsTwoFactorsVerified, IsInternalUser]
+    permission_classes = [IsAuthenticated, MFAActive, IsInternalUser]
 
     def post(self, request):
 

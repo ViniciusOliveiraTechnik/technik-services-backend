@@ -11,12 +11,12 @@ from invoice.paginations.card import CardStandardPagination
 
 from accounts.permissions import IsInternalUser
 
-from jwt_auth.permissions import IsTwoFactorsVerified
+from jwt_auth.permissions import MFAActive
 
 class CardListView(ListAPIView):
 
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated, IsTwoFactorsVerified, IsInternalUser]
+    permission_classes = [IsAuthenticated, MFAActive, IsInternalUser]
 
     pagination_class = CardStandardPagination
     serializer_class = CardDetailSerializer

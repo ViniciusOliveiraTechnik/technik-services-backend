@@ -1,1 +1,1 @@
-from .two_factors_permission import ( IsTwoFactorsVerified )
+from .mfa_active_permission import ( MFAActive )

@@ -8,12 +8,12 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from accounts.permissions import IsOwnerOrAdmin
 from accounts.services import AccountMeService
 
-from jwt_auth.permissions import IsTwoFactorsVerified
+from jwt_auth.permissions import MFAActive
 
 class AccountMeView(APIView):
 
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsTwoFactorsVerified, IsOwnerOrAdmin, IsAuthenticated]
+    permission_classes = [MFAActive, IsOwnerOrAdmin, IsAuthenticated]
 
     def get(self, request):
 

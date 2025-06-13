@@ -3,13 +3,13 @@ from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework_simplejwt.exceptions import TokenError
 
-from jwt_auth.serializers.two_factors import TwoFactorsSerializer
-from jwt_auth.utils.two_factors import OTPUtil
-from jwt_auth.utils.tokens import JwtUtil
+from jwt_auth.serializers.auth import AuthOtpSerializer
+from jwt_auth.utils import OTPUtil
+from jwt_auth.utils import JwtUtil
 
 from accounts.models import Account
 
-class TwoFactorsService:
+class AuthMFAValidateService:
 
     def __init__(self, context = None):
         
@@ -17,9 +17,9 @@ class TwoFactorsService:
         self.otp_util = OTPUtil()
         self.jwt_util = JwtUtil() 
 
-    def execute(self, data, temporary_token):
+    def execute(self, access_token, data):
 
-        serializer = TwoFactorsSerializer(data=data)
+        serializer = AuthOtpSerializer(data=data)
 
         serializer.is_valid(raise_exception=True)
 
@@ -27,21 +27,21 @@ class TwoFactorsService:
 
         try:
 
-            temporary_token = AccessToken(temporary_token)
+            access_token = AccessToken(access_token)
 
-            user_id = temporary_token.get('user_id')
+            user_id = access_token.get('user_id')
 
             try:
 
                 user = Account.objects.get(id=user_id)
+                
+                if not user.otp_secret:
+
+                    raise ValidationError({'user': ['As configurações de dois fatores do usuário são inválidas']})
 
                 if not self.otp_util.verify_otp(otp_code, user.otp_secret):
 
                     raise ValidationError({'otp_code': ['O código de autenticação é inválido ou expirado']})
-
-                user.is_authenticated = True
-
-                user.save()
 
                 tokens = self.jwt_util.generate_tokens(user)
 
@@ -50,7 +50,6 @@ class TwoFactorsService:
             except Account.DoesNotExist:
 
                 raise ValidationError({'user': ['Usuário não encontrado']})
-
 
         except TokenError:
 

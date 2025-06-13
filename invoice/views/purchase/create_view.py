@@ -8,12 +8,12 @@ from invoice.models import Purchase
 
 from accounts.permissions import IsInternalUser
 
-from jwt_auth.permissions import IsTwoFactorsVerified
+from jwt_auth.permissions import MFAActive
 
 class PurchaseCreateView(CreateAPIView):
 
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsInternalUser, IsTwoFactorsVerified, IsAuthenticated]
+    permission_classes = [IsInternalUser, MFAActive, IsAuthenticated]
 
     serializer_class = PurchaseBaseSerializer
 

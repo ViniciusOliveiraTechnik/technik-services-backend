@@ -1,4 +1,4 @@
-from jwt_auth.utils.tokens import JwtUtil
+from jwt_auth.utils import JwtUtil
 
 class RefreshTokenService:
 

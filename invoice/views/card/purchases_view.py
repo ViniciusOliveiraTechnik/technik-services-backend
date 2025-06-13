@@ -10,12 +10,12 @@ from invoice.permissions import IsOwnerOrAdmin
 
 from accounts.permissions import IsInternalUser
 
-from jwt_auth.permissions import IsTwoFactorsVerified
+from jwt_auth.permissions import MFAActive
 
 class CardPurchasesView(ListAPIView):
 
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsTwoFactorsVerified, IsInternalUser, IsAuthenticated, IsOwnerOrAdmin]
+    permission_classes = [MFAActive, IsInternalUser, IsAuthenticated, IsOwnerOrAdmin]
 
     serializer_class = PurchaseBaseSerializer
     pagination_class = CardStandardPagination

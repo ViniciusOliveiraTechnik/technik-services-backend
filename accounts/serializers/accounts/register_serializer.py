@@ -99,6 +99,3 @@ class AccountRegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
                 
         return self.account_util.create(validated_data)
-
-    Account.objects.filter(phone_number="+5519998122294")
-

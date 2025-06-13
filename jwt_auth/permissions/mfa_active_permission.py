@@ -1,6 +1,6 @@
 from rest_framework.permissions import BasePermission
 
-class IsTwoFactorsVerified(BasePermission):
+class MFAActive(BasePermission):
 
     message = 'Autenticação de dois fatores pendente'
 
@@ -8,4 +8,4 @@ class IsTwoFactorsVerified(BasePermission):
 
         access_token = request.auth
 
-        return True if access_token and access_token.get('2fa_verified') else False
+        return True if access_token and access_token.get('mfa_verified') else False

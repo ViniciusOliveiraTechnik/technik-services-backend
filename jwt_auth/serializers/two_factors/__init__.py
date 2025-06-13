@@ -1,1 +1,0 @@
-from .two_factors_serializer import ( TwoFactorsSerializer )

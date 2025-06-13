@@ -106,6 +106,8 @@ class Account(AbstractUser):
     email = models.EmailField(verbose_name="Email")
 
     otp_secret = models.BinaryField(verbose_name='Segredo OTP', blank=True, null=True)
+
+    is_activated = models.BooleanField(verbose_name='Usuário ativo', default=False)
     is_authenticated = models.BooleanField(verbose_name='Usuário autenticado', default=False)
 
     encrypted_cpf = models.BinaryField(verbose_name="CPF Criptografado", null=True, blank=True)

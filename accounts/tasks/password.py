@@ -11,6 +11,7 @@ def send_email_to_reset_password(access_token, user_email):
     reset_link = f'http://localhost:5173/forgot-password-confirm/?auth={access_token}'
     
     subject = 'Solicitação de recuperação de senha'
+    
     message = f'Clique no link para recuperar a sua senha: {reset_link}'
 
     send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user_email])

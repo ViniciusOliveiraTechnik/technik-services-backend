@@ -1,6 +1,6 @@
 from django.urls import path
 
-from jwt_auth.views.tokens import RefreshTokenView
+from jwt_auth.views import RefreshTokenView
 
 urlpatterns = [
 

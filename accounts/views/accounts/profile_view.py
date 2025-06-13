@@ -7,12 +7,12 @@ from accounts.permissions import IsOwnerOrAdmin
 from accounts.serializers import AccountDetailSerializer
 from accounts.models import Account
 
-from jwt_auth.permissions import IsTwoFactorsVerified
+from jwt_auth.permissions import MFAActive
 
 class AccountProfileView(RetrieveUpdateDestroyAPIView):
 
     queryset = Account.objects.all()
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated, IsOwnerOrAdmin, IsTwoFactorsVerified]
+    permission_classes = [IsAuthenticated, IsOwnerOrAdmin, MFAActive]
     serializer_class = AccountDetailSerializer
     lookup_field = 'pk'

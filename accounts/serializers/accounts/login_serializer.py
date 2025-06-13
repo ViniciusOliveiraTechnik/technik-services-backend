@@ -22,10 +22,10 @@ class AccountLoginSerializer(serializers.Serializer):
 
             raise serializers.ValidationError('As credenciais estão incorretas')
         
-        if not user.is_active:
+        if not user.is_activated:
 
-            raise serializers.ValidationError('O usuário não está ativo')
-        
+            raise serializers.ValidationError('Ative a conta para fazer o login')
+
         data['user'] = user
 
         return data

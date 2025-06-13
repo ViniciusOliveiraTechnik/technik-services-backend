@@ -2,28 +2,27 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from rest_framework_simplejwt.authentication import JWTAuthentication
+from jwt_auth.services.auth import AuthMFAValidateService
+from jwt_auth.authentications import MFAJWTAuthentication
 
-from jwt_auth.services.two_factors import TwoFactorsService
+class AuthMFAValidateView(APIView):
 
-class TwoFactorsView(APIView):
-
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [MFAJWTAuthentication]
     permission_classes = [AllowAny]
 
     def post(self, request):
 
+        access_token = str(request.auth)
         data = request.data 
-        temporary_token = str(request.auth)
         context = {'request': request, 'request_user': request.user}
 
-        service = TwoFactorsService(context)
+        service = AuthMFAValidateService(context)
 
-        response_data  = service.execute(data, temporary_token)
+        result  = service.execute(access_token, data)
 
-        refresh_token = response_data.pop('refresh_token')
+        refresh_token = result.pop('refresh_token')
 
-        response = Response(response_data)
+        response = Response(result)
 
         response.set_cookie(
             key='refresh_token',

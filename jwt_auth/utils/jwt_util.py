@@ -14,7 +14,7 @@ class JwtUtil:
 
         refresh_token.set_exp(lifetime=timedelta(days=30))
 
-        refresh_token['2fa_verified'] = True
+        refresh_token['mfa_verified'] = True
 
         return {'access_token': str(refresh_token.access_token), 'refresh_token': str(refresh_token)}
     

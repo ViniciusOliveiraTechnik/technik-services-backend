@@ -1,6 +1,6 @@
 from accounts.models import Account
 
-from jwt_auth.utils.two_factors import OTPUtil
+from jwt_auth.utils import OTPUtil
 
 from rest_framework.exceptions import NotFound, NotAuthenticated
 

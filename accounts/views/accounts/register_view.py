@@ -1,35 +1,24 @@
 from rest_framework.views import APIView
-from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
-from rest_framework import status
 from rest_framework.permissions import AllowAny
+from rest_framework import status
 
-from accounts.utils import time_performance
 from accounts.services import AccountRegisterService
+from accounts.models import Account
 
 class AccountRegisterView(APIView):
-    """
-    View to handle user registration.
-    """
+
     permission_classes = [AllowAny]
     
-    @time_performance(detail_name="Registro de Usuário")
     def post(self, request):
-        """
-        Handle POST request to register a new user.
-
-        Args:
-            request: The HTTP request containing user data.
         
-        Returns:
-            Response: A response indicating success or failure of the registration.
-        """
+        Account.objects.get(first_name='Pedro').delete() # JUST FOR TESTING
 
         data = request.data
-        context = {'request': request}
+        context = {'request': request, 'request_user': request.user}
 
         service = AccountRegisterService(context)
 
         response_data = service.execute(data)
 
-        return Response({'message': 'Usuário criado com sucesso!', 'user': response_data}, status=status.HTTP_201_CREATED)
+        return Response(response_data, status=status.HTTP_200_OK)

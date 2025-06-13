@@ -7,7 +7,7 @@ from django.db.models import Sum, Count
 
 from accounts.permissions import IsInternalUser
 
-from jwt_auth.permissions import IsTwoFactorsVerified
+from jwt_auth.permissions import MFAActive
 
 from invoice.models import Invoice
 from invoice.serializers.invoice import InvoiceBaseSerializer
@@ -15,7 +15,7 @@ from invoice.serializers.invoice import InvoiceBaseSerializer
 class InvoiceListView(ListAPIView):
 
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated, IsInternalUser, IsTwoFactorsVerified]
+    permission_classes = [IsAuthenticated, IsInternalUser, MFAActive]
 
     serializer_class = InvoiceBaseSerializer
 

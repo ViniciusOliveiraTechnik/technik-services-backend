@@ -1,49 +1,26 @@
-from accounts.serializers import AccountDetailSerializer, AccountRegisterSerializer
-from accounts.models import Account
+from accounts.serializers import AccountRegisterSerializer
+from accounts.tasks import send_email_to_activate_account
 
-from jwt_auth.utils.two_factors import OTPUtil
-
-from typing import Dict, Any
+from jwt_auth.utils import JwtUtil
+from jwt_auth.tokens import ActionToken
 
 class AccountRegisterService:
 
-    def __init__(self, context=None):
+    def __init__(self, context = None):
 
         self.context = context or {}
+        self.jwt_util = JwtUtil()
         
     def execute(self, data):
-
-        otp_util = OTPUtil()
 
         serializer = AccountRegisterSerializer(data=data)
 
         serializer.is_valid(raise_exception=True)
 
         user = serializer.save()
-
-        user.otp_secret = otp_util.generate_otp_secret()
         
-        user.save()
-
-        self.context['explicit_user'] = user
-
-        return AccountDetailSerializer(user, context=self.context).data
-    
-    def create(self, validated_data: Dict[str, Any]):
-
-        cpf = validated_data.pop('cpf')
-        password = validated_data.pop('password')
-        del validated_data['repeat_password']
-
-        user = Account(**validated_data)
-
-        user.set_password(password)
-        user.set_cpf(cpf)
-
-        user.save()
-
-        return user
-    
-    def check_exists(self, field: str, value: Any):
-
-        return Account.objects.filter(**{field: value}).exists()
+        action_token = ActionToken(action='activate_account').for_user(user)
+        
+        send_email_to_activate_account.delay(str(action_token), user.email)
+        
+        return {'message': 'Conta criada com sucesso!'}

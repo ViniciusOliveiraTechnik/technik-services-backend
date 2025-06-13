@@ -24,6 +24,12 @@ class PasswordForgotConfirmService:
 
             access_token = AccessToken(access_token)
 
+            action = access_token.get('action')
+
+            if action != 'forgot_password':
+
+                raise ValidationError({'token': ['O token fornecido não tem acesso a este serviço']})
+
             user_id = access_token.get('user_id')
 
             try:
@@ -38,8 +44,8 @@ class PasswordForgotConfirmService:
 
             except Account.DoesNotExist:
 
-                raise ValidationError('Usuário não encontrado')
+                raise ValidationError({'user': ['Usuário não encontrado']})
 
         except TokenError as err:
 
-            raise ValidationError('O token de acesso é inválido ou expirado')
+            raise ValidationError({'token': ['O token de acesso é inválido ou expirado']})

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-class TwoFactorsSerializer(serializers.Serializer):
+class AuthOtpSerializer(serializers.Serializer):
 
     otp_code = serializers.CharField(required=True, write_only=True)
 
